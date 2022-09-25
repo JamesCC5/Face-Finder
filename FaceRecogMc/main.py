@@ -1,4 +1,3 @@
-import tkinter
 import tkinter as tk
 import tkinter.messagebox
 import customtkinter
@@ -26,14 +25,14 @@ class App(customtkinter.CTk):
         # Center the window
         screen_width = App.winfo_screenwidth(self)
         screen_height = App.winfo_screenheight(self)
-        x = (screen_width/2) - (App.width/2)
-        y = (screen_height/2) - (App.height/2)
+        x = (screen_width / 2) - (App.width / 2)
+        y = (screen_height / 2) - (App.height / 2)
         self.geometry(f"{App.width}x{App.height}+{int(x)}+{int(y)}")
-
         self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
-        self.iconphoto(True, tk.PhotoImage(file='assets/facedetect.png'))  # App icon
+        self.iconphoto(True, tk.PhotoImage(file='assets/facedetectdark.png'))  # App icon
         self.frame_main()
         self.attributes('-alpha', 1.0)  # For transparency adjustment
+        self.resizable(height=0, width=0)
 
     def frame_main(self):
 
@@ -260,6 +259,10 @@ class App(customtkinter.CTk):
 
     def change_appearance_mode(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
+        if new_appearance_mode == "Light":
+            self.iconphoto(True, tk.PhotoImage(file='assets/facedetectlight.png'))
+        else:
+            self.iconphoto(True, tk.PhotoImage(file='assets/facedetectdark.png'))
 
     def change_color_theme(self, color_theme):
         customtkinter.set_default_color_theme(color_theme)
@@ -301,16 +304,15 @@ class App(customtkinter.CTk):
                                                     to=1,
                                                     command=self.slide)
         self.transparency.grid(row=1, column=2, columnspan=2, pady=10, sticky="we")
+        self.transparency.set(self.attributes('-alpha'))  # Track the transparency
 
         # Description
 
         # Create a photoimage object of the image in the path
-        imagecredit = Image.open("assets/credit.png").convert("RGBA")
-        credit = ImageTk.PhotoImage(imagecredit)
-
+        credit = ImageTk.PhotoImage(Image.open("assets/credit.png").convert("RGBA"))
         labelcredit = tkinter.Label(master=self.setting_frameup, image=credit)
         labelcredit.image = credit
-        labelcredit.grid(row=2, column=0, columnspan=5, pady=40, sticky="we")  # Position image
+        labelcredit.grid(row=2, column=0, columnspan=5, pady=40, padx=3, sticky="we")  # Position image
 
         # Frame Down
         self.setting_framedown = customtkinter.CTkFrame(master=self,
