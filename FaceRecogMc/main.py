@@ -303,7 +303,7 @@ class App(customtkinter.CTk):
                                                     from_=0.3,
                                                     to=1,
                                                     command=self.slide)
-        self.transparency.grid(row=1, column=2, columnspan=2, pady=10, sticky="we")
+        self.transparency.grid(row=1, column=2, columnspan=2, pady=10, padx=10, sticky="we")
         self.transparency.set(self.attributes('-alpha'))  # Track the transparency
 
         # Description
