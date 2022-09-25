@@ -63,7 +63,7 @@ class App(customtkinter.CTk):
         self.button_process = customtkinter.CTkButton(master=self.frame_down,
                                                       text="Process",
                                                       text_font=("Roboto Light", -14),  # font name and size in px
-                                                      command=self.button_process)
+                                                      command=self.process)
         self.button_process.grid(row=1, column=2, pady=10, padx=20)
 
         # ============ create up frame ============
@@ -202,7 +202,7 @@ class App(customtkinter.CTk):
         else:
             self.showinfo("I found " + str(matched) + " face(s) that match(es) your selected face")
 
-    def button_process(self):
+    def process(self):
         global matched
         try:
             # Since the first image
