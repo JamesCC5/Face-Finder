@@ -7,6 +7,7 @@ from tkinter import filedialog
 from glob import glob
 import shutil
 from PIL import Image, ImageTk, UnidentifiedImageError
+from customtkinter import AppearanceModeTracker
 
 # In case you encountered import error | pip3 install dlib --force-reinstall --no-cache-dir --global-option=build_ext
 
@@ -57,12 +58,14 @@ class App(customtkinter.CTk):
         # Things happen in the downside
         self.label_left = customtkinter.CTkLabel(master=self.frame_down,
                                                  text="Face Finder",
-                                                 text_font=("Roboto Medium", -16))  # font name and size in px
-        self.label_left.grid(row=1, column=0, pady=10)
+                                                 font=customtkinter.CTkFont("Roboto Medium",
+                                                                            size=16))  # font name and size in px
+        self.label_left.grid(row=1, column=0, pady=10, padx=25)
 
         self.button_process = customtkinter.CTkButton(master=self.frame_down,
                                                       text="Process",
-                                                      text_font=("Roboto Light", -14),  # font name and size in px
+                                                      font=customtkinter.CTkFont("Roboto Light", size=14),
+                                                      # font name and size in px
                                                       command=self.process)
         self.button_process.grid(row=1, column=2, pady=10, padx=20)
 
@@ -77,35 +80,40 @@ class App(customtkinter.CTk):
         self.frame_up.grid_rowconfigure(8, weight=1)
 
         # Settings button
+        self.setfontcolor()  # Set the "≡" color optionally
         self.button_settings = customtkinter.CTkButton(master=self.frame_up,
                                                        text="≡",
-                                                       text_font=("Roboto Medium", -50),
+                                                       font=customtkinter.CTkFont("Roboto Medium", size=50),
                                                        width=75,
-                                                       fg_color=None,  # <- no fg_color
+                                                       fg_color="transparent",  # <- no fg_color
+                                                       text_color=optioncolor,
                                                        command=self.settings)
         self.button_settings.grid(row=0, column=0, columnspan=3, sticky="w")  # I take the whole 19 columns
 
         # ICON
         self.icon_1 = customtkinter.CTkLabel(master=self.frame_up,
                                              text="👤",
-                                             text_font=("Roboto Bold", -100))  # font name and size in px
+                                             font=customtkinter.CTkFont("Roboto Bold",
+                                                                        size=100))  # font name and size in px
         self.icon_1.grid(row=1, column=2, rowspan=3, columnspan=3, pady=10)
 
         self.icon_2 = customtkinter.CTkLabel(master=self.frame_up,
                                              text="👥",
-                                             text_font=("Roboto Bold", -100))  # font name and size in px
+                                             font=customtkinter.CTkFont("Roboto Bold",
+                                                                        size=100))  # font name and size in px
         self.icon_2.grid(row=1, column=8, rowspan=3, columnspan=3, pady=10)
 
         self.icon_3 = customtkinter.CTkLabel(master=self.frame_up,
                                              text="📁",
-                                             text_font=("Roboto Bold", -100))  # font name and size in px
+                                             font=customtkinter.CTkFont("Roboto Bold",
+                                                                        size=100))  # font name and size in px
         self.icon_3.grid(row=1, column=14, rowspan=3, columnspan=3, pady=10)
 
         # Three Text
         self.label1 = customtkinter.CTkLabel(master=self.frame_up,
                                              text="Who are you\n" +
                                                   " looking for?",
-                                             text_font=("Roboto Medium", -20),
+                                             font=customtkinter.CTkFont("Roboto Medium", size=20),
                                              height=100,
                                              justify=tkinter.LEFT)
         self.label1.grid(column=2, row=7, rowspan=3, columnspan=3, sticky="nwe", pady=15)
@@ -113,7 +121,7 @@ class App(customtkinter.CTk):
         self.label2 = customtkinter.CTkLabel(master=self.frame_up,
                                              text=" Where are you\n" +
                                                   "searching them?",
-                                             text_font=("Roboto Medium", -20),
+                                             font=customtkinter.CTkFont("Roboto Medium", size=20),
                                              height=100,
                                              justify=tkinter.LEFT)
         self.label2.grid(column=8, row=7, rowspan=3, columnspan=3, sticky="nwe", pady=15)
@@ -121,7 +129,7 @@ class App(customtkinter.CTk):
         self.label3 = customtkinter.CTkLabel(master=self.frame_up,
                                              text="     Where will the \n" +
                                                   "matched image be?",
-                                             text_font=("Roboto Medium", -20),
+                                             font=customtkinter.CTkFont("Roboto Medium", size=20),
                                              height=100,
                                              justify=tkinter.LEFT)
         self.label3.grid(column=14, row=7, rowspan=3, columnspan=3, sticky="nwe", pady=15)
@@ -129,7 +137,7 @@ class App(customtkinter.CTk):
         # Three Buttons
         self.button_left = customtkinter.CTkButton(master=self.frame_up,
                                                    text="GO",
-                                                   text_font=("Roboto Bold", -16),
+                                                   font=customtkinter.CTkFont("Roboto Bold", size=16),
                                                    width=100, height=40,
                                                    border_width=1,  # <- custom border_width
                                                    fg_color=None,  # <- no fg_color
@@ -139,7 +147,7 @@ class App(customtkinter.CTk):
         self.button_middle = customtkinter.CTkButton(master=self.frame_up,
                                                      text="GO",
                                                      width=100, height=40,
-                                                     text_font=("Roboto Bold", -16),
+                                                     font=customtkinter.CTkFont("Roboto Bold", size=16),
                                                      border_width=1,  # <- custom border_width
                                                      fg_color=None,  # <- no fg_color
                                                      command=self.button_step2)
@@ -148,7 +156,7 @@ class App(customtkinter.CTk):
         self.button_right = customtkinter.CTkButton(master=self.frame_up,
                                                     text="GO",
                                                     width=100, height=40,
-                                                    text_font=("Roboto Bold", -16),
+                                                    font=customtkinter.CTkFont("Roboto Bold", size=16),
                                                     border_width=1,  # <- custom border_width
                                                     fg_color=None,  # <- no fg_color
                                                     command=self.button_step3)
@@ -211,7 +219,7 @@ class App(customtkinter.CTk):
             print("Processing...")
 
             # Loop until the last image
-            while enumerate(unknown_images_location):
+            while enumerate(unknown_images_location):  # If img_index < len(unknown_images_location):
                 global unknown_image
                 try:
                     # Load an image with an unknown face
@@ -264,6 +272,13 @@ class App(customtkinter.CTk):
         else:
             self.iconphoto(True, tk.PhotoImage(file='assets/facedetectdark.png'))
 
+    def setfontcolor(self):  # Optionally
+        global optioncolor
+        if AppearanceModeTracker.appearance_mode == 0:
+            optioncolor = "black"
+        else:
+            optioncolor = "white"
+
     def change_color_theme(self, color_theme):
         customtkinter.set_default_color_theme(color_theme)
 
@@ -276,7 +291,7 @@ class App(customtkinter.CTk):
 
         self.label_appearance = customtkinter.CTkLabel(master=self.setting_frameup,
                                                        text="Appearance Mode:",
-                                                       text_font=("Roboto Bold", -14))
+                                                       font=customtkinter.CTkFont("Roboto Bold", size=14))
         self.label_appearance.grid(row=0, column=0, pady=10, padx=20, sticky="w")
 
         self.option_appearance = customtkinter.CTkOptionMenu(master=self.setting_frameup,
@@ -286,7 +301,7 @@ class App(customtkinter.CTk):
 
         self.label_appearance = customtkinter.CTkLabel(master=self.setting_frameup,
                                                        text="Color Theme:",
-                                                       text_font=("Roboto Bold", -14))
+                                                       font=customtkinter.CTkFont("Roboto Bold", size=14))
         self.label_appearance.grid(row=0, column=1, pady=10, padx=20, sticky="w")
 
         self.option_appearance = customtkinter.CTkOptionMenu(master=self.setting_frameup,
@@ -296,7 +311,7 @@ class App(customtkinter.CTk):
 
         self.label_transparency = customtkinter.CTkLabel(master=self.setting_frameup,
                                                          text="Transparency",
-                                                         text_font=("Roboto Bold", -14))
+                                                         font=customtkinter.CTkFont("Roboto Bold", size=14))
         self.label_transparency.grid(row=0, column=2, pady=10, padx=20, sticky="w")
 
         self.transparency = customtkinter.CTkSlider(master=self.setting_frameup,
@@ -322,7 +337,8 @@ class App(customtkinter.CTk):
 
         self.button_back = customtkinter.CTkButton(master=self.setting_framedown,
                                                    text="BACK",
-                                                   text_font=("Roboto Light", -14),  # font name and size in px
+                                                   font=customtkinter.CTkFont("Roboto Light", size=14),
+                                                   # font name and size in px
                                                    command=self.show_main)
         self.button_back.grid(row=0, column=0, pady=15, padx=20)
 
