@@ -80,7 +80,7 @@ class App(customtkinter.CTk):
         self.frame_up.grid_rowconfigure(8, weight=1)
 
         # Settings button
-        self.setfontcolor()  # Set the "≡" color optionally
+        self.setcolor()  # Set the "≡" color optionally
         self.button_settings = customtkinter.CTkButton(master=self.frame_up,
                                                        text="≡",
                                                        font=customtkinter.CTkFont("Roboto Medium", size=50),
@@ -271,13 +271,25 @@ class App(customtkinter.CTk):
             self.iconphoto(True, tk.PhotoImage(file='assets/facedetectlight.png'))
         else:
             self.iconphoto(True, tk.PhotoImage(file='assets/facedetectdark.png'))
+        self.credit()
 
-    def setfontcolor(self):  # Optionally
-        global optioncolor
+    def setcolor(self):  # Optionally
+        global optioncolor, chosenimage
         if AppearanceModeTracker.appearance_mode == 0:
             optioncolor = "black"
+            chosenimage = "assets/credit_l.png"
         else:
             optioncolor = "white"
+            chosenimage = "assets/credit_d.png"
+
+    def credit(self):
+        self.setcolor()
+        # Create a photoimage object of the image in the path
+        credit = ImageTk.PhotoImage(Image.open(chosenimage).convert("RGBA"))
+        labelcredit = tkinter.Label(master=self.setting_frameup, image=credit)
+        labelcredit.image = credit
+        labelcredit.grid(row=2, column=0, columnspan=5, pady=40, padx=3, sticky="we")  # Position image
+
 
     def change_color_theme(self, color_theme):
         customtkinter.set_default_color_theme(color_theme)
@@ -291,43 +303,38 @@ class App(customtkinter.CTk):
 
         self.label_appearance = customtkinter.CTkLabel(master=self.setting_frameup,
                                                        text="Appearance Mode:",
-                                                       font=customtkinter.CTkFont("Roboto Bold", size=14))
-        self.label_appearance.grid(row=0, column=0, pady=10, padx=20, sticky="w")
+                                                       font=customtkinter.CTkFont("Roboto Bold", size=14,))
+        self.label_appearance.grid(row=0, column=0, pady=10, padx=(10, 10))
 
         self.option_appearance = customtkinter.CTkOptionMenu(master=self.setting_frameup,
                                                              values=["System", "Light", "Dark"],
                                                              command=self.change_appearance_mode)
-        self.option_appearance.grid(row=1, column=0, padx=20, sticky="w")
+        self.option_appearance.grid(row=1, column=0, padx=20)
 
         self.label_appearance = customtkinter.CTkLabel(master=self.setting_frameup,
                                                        text="Color Theme:",
                                                        font=customtkinter.CTkFont("Roboto Bold", size=14))
-        self.label_appearance.grid(row=0, column=1, pady=10, padx=20, sticky="w")
+        self.label_appearance.grid(row=0, column=1, pady=10, padx=(0, 10))
 
         self.option_appearance = customtkinter.CTkOptionMenu(master=self.setting_frameup,
                                                              values=["dark-blue", "blue", "green"],
                                                              command=self.change_color_theme)
-        self.option_appearance.grid(row=1, column=1, padx=20, sticky="w")
+        self.option_appearance.grid(row=1, column=1, padx=20)
 
         self.label_transparency = customtkinter.CTkLabel(master=self.setting_frameup,
                                                          text="Transparency",
                                                          font=customtkinter.CTkFont("Roboto Bold", size=14))
-        self.label_transparency.grid(row=0, column=2, pady=10, padx=20, sticky="w")
+        self.label_transparency.grid(row=0, column=2, pady=10, padx=(20, 0))
 
         self.transparency = customtkinter.CTkSlider(master=self.setting_frameup,
                                                     from_=0.3,
                                                     to=1,
                                                     command=self.slide)
-        self.transparency.grid(row=1, column=2, columnspan=2, pady=10, padx=10, sticky="we")
+        self.transparency.grid(row=1, column=2, columnspan=2, pady=10, padx=10)
         self.transparency.set(self.attributes('-alpha'))  # Track the transparency
 
         # Description
-
-        # Create a photoimage object of the image in the path
-        credit = ImageTk.PhotoImage(Image.open("assets/credit.png").convert("RGBA"))
-        labelcredit = tkinter.Label(master=self.setting_frameup, image=credit)
-        labelcredit.image = credit
-        labelcredit.grid(row=2, column=0, columnspan=5, pady=40, padx=3, sticky="we")  # Position image
+        self.credit()
 
         # Frame Down
         self.setting_framedown = customtkinter.CTkFrame(master=self,
